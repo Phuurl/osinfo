@@ -28,22 +28,9 @@ jobs:
       - name: Run Gosec
         run: |
           gosec -verbose text ./...
-  run-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17
-      - name: Get tools
+      - name: Run Staticcheck (Windows)
         run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
-          wget https://github.com/securego/gosec/releases/download/v2.9.6/gosec_2.9.6_windows_amd64.tar.gz -o gosec.tar.gz
-          tar -xvf gosec_2.9.6_windows_amd64.tar.gz
-      - name: Run Staticcheck
+          GOOS=windows staticcheck -f stylish ./...
+      - name: Run Gosec (Windows)
         run: |
-          staticcheck -f stylish ./...
-      - name: Run Gosec
-        run: |
-          ./gosec.exe -verbose text ./...
+          GOOS=windows gosec -verbose text ./...
