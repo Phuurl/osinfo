@@ -27,7 +27,9 @@ func osHandler() (Details, error) {
 	if err != nil {
 		return Details{}, err
 	}
-	defer versionFile.Close()
+	defer func(versionFile *os.File) {
+		_ = versionFile.Close()
+	}(versionFile)
 
 	var plistResult macOsReleasePlist
 	decoder := plist.NewDecoder(versionFile)
